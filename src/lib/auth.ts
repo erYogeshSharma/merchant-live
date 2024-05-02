@@ -15,10 +15,12 @@ export const authConfig: NextAuthOptions = {
   // Secret for Next-auth, without this JWT encryption/decryption won't work
   secret: process.env.AUTH_SECRET,
 
+  pages: {},
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
       name: "Sign in",
+
       credentials: {
         email: {},
         password: {},
@@ -36,8 +38,7 @@ export const authConfig: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log({ user, account, profile, email, credentials });
-      return true;
+      return false;
     },
   },
 };

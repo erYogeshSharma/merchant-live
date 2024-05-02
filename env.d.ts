@@ -7,5 +7,9 @@ namespace NodeJS {
     SENDGRID_API_KEY: string;
     MAIL_FROM: string;
     APP_URL: string;
+
+    JWT_SECRET: string;
+    EMAIL_VERIFY_SECRET: string;
+    RESET_PASSWORD_SECRET: string;
   }
 }

@@ -2,8 +2,8 @@ import { UserModel } from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import dbConnect from "@/lib/connect_db";
-import Email from "next-auth/providers/email";
 import sendmail from "@/lib/sendgrid";
+import jwt from "jsonwebtoken";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,8 +12,6 @@ export async function POST(req: NextRequest) {
 
     const userData = body;
 
-    console.log({ userData });
-    //Confirm data exists
     if (!userData?.email || !userData.password) {
       return NextResponse.json(
         { message: "All fields are required." },
@@ -32,15 +30,23 @@ export async function POST(req: NextRequest) {
 
     const hashPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashPassword;
+    userData.authType = "credentials";
 
-    await UserModel.create(userData);
+    const newUser = await UserModel.create(userData);
 
+    const emailVerifyToken = jwt.sign(
+      { _id: newUser._id, iss: "NODEAPI" },
+      process.env.EMAIL_VERIFY_SECRET
+    );
+
+    newUser.emailVerifyToken = emailVerifyToken;
+    await newUser.save();
     const emailData = {
       from: { email: process.env.MAIL_FROM, name: "Team Zapminds" },
       to: userData.email,
-      subject: "Welcone to Merchant Live: Verify your mail",
+      subject: `${userData.name}  Welcone to Merchant Live: Verify your mail`,
       text: "veriy your email here",
-      html: `<strong>verify lik</strong>`,
+      html: `<strong>Verify your email at <a href="${process.env.APP_URL}/auth/verify/${emailVerifyToken}" target="_blank" > ${process.env.APP_URL}/auth/verify/${emailVerifyToken}</a>  </strong> `,
     };
 
     await sendmail(emailData);

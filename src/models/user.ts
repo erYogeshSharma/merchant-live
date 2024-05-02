@@ -13,6 +13,9 @@ export default interface User {
   status?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+
+  authType?: "credentials" | "google";
+
   resetPasswordToken?: string;
   emailVerifyToken?: string;
 }
@@ -28,12 +31,24 @@ const schema = new Schema<User>(
       type: Schema.Types.String,
       trim: true,
     },
+    resetPasswordToken: {
+      type: Schema.Types.String,
+      trim: true,
+    },
+    emailVerifyToken: {
+      type: Schema.Types.String,
+      trim: true,
+    },
     email: {
       type: Schema.Types.String,
       unique: true,
       sparse: true, // allows null
       trim: true,
       select: false,
+    },
+    authType: {
+      type: Schema.Types.String,
+      required: true,
     },
     password: {
       type: Schema.Types.String,

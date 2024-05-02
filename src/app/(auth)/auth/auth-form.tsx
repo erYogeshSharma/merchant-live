@@ -2,20 +2,13 @@
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { FormEvent, useState } from "react";
 import OAuth from "./o-auth";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import LogOut from "./logout";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +16,7 @@ export function LoginForm() {
   const router = useRouter();
   const [isSignUp, setIsSignup] = useState(false);
   const [error, setError] = useState("");
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -39,9 +33,12 @@ export function LoginForm() {
       if (!res.ok) {
         const response = await res.json();
         setError(response.message);
+        return;
       } else {
+        localStorage.setItem("email-to-verify", data.get("email") as string);
         router.refresh();
-        router.push("/");
+        router.push("/auth/verify");
+        return;
       }
     }
 
@@ -104,7 +101,7 @@ export function LoginForm() {
           <OAuth />
         </div>
         <div className="mt-4 text-center text-sm">
-          {isSignUp ? "Already have an account?" : "Don't hane an account?"}
+          {isSignUp ? "Already have an account?" : "Don't have an account?"}
           &nbsp;
           <Link
             onClick={() => setIsSignup((ps) => !ps)}

@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginForm } from "./signin-form";
+import { LoginForm } from "./auth-form";
 import { ModeToggle } from "@/components/color-mode-toggle";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/lib/auth";
