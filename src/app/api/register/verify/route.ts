@@ -1,8 +1,8 @@
 import dbConnect from "@/lib/connect_db";
-import { UserModel } from "@/models/user";
+import { User } from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res: NextResponse) {
   try {
     await dbConnect();
     const body = await req.json();
@@ -14,9 +14,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = await UserModel.findOne({ email: body.email });
+    const user = await User.findOne({ email: body.email });
 
-    if (user.verified) {
+    if (user?.verified) {
       return NextResponse.json(
         { message: "Email  verified!" },
         { status: 200 }

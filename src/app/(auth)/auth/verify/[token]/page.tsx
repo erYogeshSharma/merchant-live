@@ -1,14 +1,14 @@
 import dbConnect from "@/lib/connect_db";
 import React, { useEffect, useState } from "react";
 import jwt from "jsonwebtoken";
-import { UserModel } from "@/models/user";
+import { User } from "@/models/user";
 async function verifyToken(token: string) {
   try {
     await dbConnect();
     const decoded = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET) as {
       _id: string;
     };
-    const user = await UserModel.findById(decoded?._id as string);
+    const user = await User.findById(decoded?._id as string);
 
     if (!user) {
       return "Invalid token";

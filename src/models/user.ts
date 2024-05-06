@@ -1,9 +1,17 @@
-import { model, Schema, Types } from "mongoose";
+import {
+  InferSchemaType,
+  Model,
+  model,
+  ObtainSchemaGeneric,
+  Schema,
+  Types,
+} from "mongoose";
 import mongoose from "mongoose";
+
 export const DOCUMENT_NAME = "User";
 export const COLLECTION_NAME = "users";
 
-export default interface User {
+export default interface UserInterface {
   _id: Types.ObjectId;
   name?: string;
   profilePicUrl?: string;
@@ -20,7 +28,7 @@ export default interface User {
   emailVerifyToken?: string;
 }
 
-const schema = new Schema<User>(
+const schema = new Schema<UserInterface>(
   {
     name: {
       type: Schema.Types.String,
@@ -44,7 +52,7 @@ const schema = new Schema<User>(
       unique: true,
       sparse: true, // allows null
       trim: true,
-      select: false,
+      select: true,
     },
     authType: {
       type: Schema.Types.String,
@@ -52,7 +60,7 @@ const schema = new Schema<User>(
     },
     password: {
       type: Schema.Types.String,
-      select: false,
+      select: true,
     },
     verified: {
       type: Schema.Types.Boolean,
@@ -63,6 +71,7 @@ const schema = new Schema<User>(
       default: true,
     },
   },
+
   {
     timestamps: true,
   }
@@ -72,5 +81,17 @@ schema.index({ _id: 1, status: 1 });
 schema.index({ email: 1 });
 schema.index({ status: 1 });
 
-export const UserModel =
-  mongoose.models.User || model<User>(DOCUMENT_NAME, schema, COLLECTION_NAME);
+// type GenericModel<TSchema extends Schema = any> = Model<
+//   InferSchemaType<TSchema>,
+//   ObtainSchemaGeneric<TSchema, "TQueryHelpers">,
+//   ObtainSchemaGeneric<TSchema, "TInstanceMethods">,
+//   ObtainSchemaGeneric<TSchema, "TVirtuals">,
+//   TSchema
+// > &
+//   ObtainSchemaGeneric<TSchema, "TStaticMethods">;
+
+// type UserModel = GenericModel<typeof schema>;
+
+export const User =
+  mongoose.models.User ||
+  model<UserInterface>(DOCUMENT_NAME, schema, COLLECTION_NAME);

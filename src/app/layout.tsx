@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { NextAuthProvider } from "@/components/session-provider";
-import { Toast } from "@/components/ui/toast";
-import { Toaster } from "@/components/ui/toaster";
-
+import PrelineScript from "@/components/preline";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -30,15 +27,11 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Toaster />
-          <NextAuthProvider>{children}</NextAuthProvider>
-        </ThemeProvider>
+        <PrelineScript />{" "}
+        <NextAuthProvider>
+          {/* <PrelineScript /> */}
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );
