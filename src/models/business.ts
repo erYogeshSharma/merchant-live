@@ -24,6 +24,7 @@ export default interface Business {
   state?: string;
   zipCode?: number;
   industry?: string;
+  googleMapLink?: string;
 
   enableEnquiryForm?: boolean;
   enableAppointmentForm?: boolean;
@@ -88,6 +89,9 @@ const schema = new Schema<Business>(
       type: Schema.Types.Number,
     },
     address: {
+      type: Schema.Types.String,
+    },
+    googleMapLink: {
       type: Schema.Types.String,
     },
     country: {

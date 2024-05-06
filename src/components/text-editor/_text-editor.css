@@ -1,0 +1,14 @@
+ .quill{
+
+     .ql-toolbar {
+        border:none;
+        border-bottom: 1px solid  #e2e8f0;
+        }
+        .ql-container {
+           border: none;
+           max-height: 400px;
+           min-height: 200px;
+           overflow-y: auto;
+        }
+    }
+  

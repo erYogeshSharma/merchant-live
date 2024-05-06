@@ -11,5 +11,13 @@ namespace NodeJS {
     JWT_SECRET: string;
     EMAIL_VERIFY_SECRET: string;
     RESET_PASSWORD_SECRET: string;
+
+    AWS_ACCESS_KEY_ID: string;
+    AWS_SECRET_ACCESS_KEY: string;
+
+    MEDIA_S3_REGION: string;
+    MEDIA_S3_BUCKET_ARN: string;
+    MEDIA_CLOUDFRNT_URL: string;
+    MEDIA_S3_BUCKET: string;
   }
 }
