@@ -13,9 +13,7 @@ export default interface User {
   status?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-
   authType?: "credentials" | "google";
-
   resetPasswordToken?: string;
   emailVerifyToken?: string;
 }
@@ -44,7 +42,7 @@ const schema = new Schema<User>(
       unique: true,
       sparse: true, // allows null
       trim: true,
-      select: false,
+      // select: false,
     },
     authType: {
       type: Schema.Types.String,
@@ -52,7 +50,7 @@ const schema = new Schema<User>(
     },
     password: {
       type: Schema.Types.String,
-      select: false,
+      // select: false,
     },
     verified: {
       type: Schema.Types.Boolean,

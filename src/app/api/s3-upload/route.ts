@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const s3Client = new S3Client({
@@ -11,8 +11,8 @@ const s3Client = new S3Client({
 
 async function uploadFileToS3(file: Buffer, fileName: String) {
   const fileBuffer = file;
-  console.log(fileName);
 
+  console.log({ fileName });
   const params = {
     Bucket: process.env.MEDIA_S3_BUCKET,
     Key: `${fileName}`,
@@ -29,20 +29,22 @@ async function uploadFileToS3(file: Buffer, fileName: String) {
   }
 }
 
-export async function POST(request: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const directory = formData.get("directory") as string;
 
     if (!file) {
       return NextResponse.json({ error: "File is required." }, { status: 400 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const fileName = await uploadFileToS3(buffer, file.name);
+    const fileName = await uploadFileToS3(buffer, `${directory}/${file.name}`);
     const fileURL = `${process.env.MEDIA_CLOUDFRNT_URL}/${fileName}`;
     return NextResponse.json({ success: true, fileURL });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error });
   }
 }
